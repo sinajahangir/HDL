@@ -286,7 +286,7 @@ ax_last.set_xlabel('NF size')
 ax_last.set_ylabel('ECDF')
 #save figure
     #change directory
-plt.savefig(r'D:\Paper\Code\HDL\Results\Hyperparamters_NF_D_W_v1.png',pad_inches=0.1)
+#plt.savefig(r'D:\Paper\Code\HDL\Results\Hyperparamters_NF_D_W_v1.png',pad_inches=0.1)
 
 
 
