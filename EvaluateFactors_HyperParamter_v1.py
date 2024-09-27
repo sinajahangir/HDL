@@ -118,19 +118,7 @@ elu_p_w=100-lin_p_w
 # import library for CDF estimation
 from statsmodels.distributions.empirical_distribution import ECDF
 #%%
-#plot the ECDF
-# Create the subplots grid
-
-daily_c='#008080'
-weekly_c='#B7410E'
-
-fig, ax = plt.subplots(2, 2, figsize=(8,8),dpi=400,sharey='row')
-fig.subplots_adjust(hspace=0.3, wspace=0.15)
-
-# Add extra space below for the last centered subplot
-fig.subplots_adjust(bottom=0.4)
-
-    ##empirical CDF
+##empirical CDF derivation
 ecdf_lstm = ECDF(lstm_size)
 ecdf_lstm_w = ECDF(lstm_size_w)
 
@@ -142,7 +130,21 @@ ecdf_nfl_w = ECDF(nf_layers_w)
 
 ecdf_nfl_size = ECDF(nf_size)
 ecdf_nfl_size_w = ECDF(nf_size_w)
+#%%
+#plot the ECDF
+# Create the subplots grid
 
+# colorcode for plotting
+daily_c='#008080'
+weekly_c='#B7410E'
+
+fig, ax = plt.subplots(2, 2, figsize=(7,7),dpi=500,sharey='row')
+fig.subplots_adjust(hspace=0.4, wspace=0.2)
+
+# Add extra space below for the last centered subplot
+fig.subplots_adjust(bottom=0.45)
+
+    ##LSTM size (16-256)
 ax[0,0].plot(ecdf_lstm.x, ecdf_lstm.y, label='Daily', color=daily_c, linestyle='-',linewidth=2)
 ax[0,0].plot(ecdf_lstm_w.x, ecdf_lstm_w.y, label='Weekly', color=weekly_c, linestyle='--',linewidth=2)
 
@@ -173,7 +175,7 @@ legend.get_frame().set_linestyle('--')
 legend.get_frame().set_edgecolor('gray')
 
 
-    ## Dense head size
+    ## Dense head size (16-64)
 ax[0,1].plot(ecdf_dense.x, ecdf_dense.y, label='Daily', color=daily_c, linestyle='-',linewidth=2)
 ax[0,1].plot(ecdf_dense_w.x, ecdf_dense_w.y, label='Weekly', color=weekly_c, linestyle='--',linewidth=2)
 
@@ -257,7 +259,7 @@ ax[1,1].set_xticklabels(['linear','elu'])
 
 # Create the centered subplot at the bottom
     ##NF layer size
-ax_last = fig.add_axes([0.3, 0.05, 0.4, 0.25])
+ax_last = fig.add_axes([0.3, 0.05, 0.4, 0.3])
 ax_last.plot(ecdf_nfl_size.x, ecdf_nfl_size.y, label='Daily', color=daily_c, linestyle='-',linewidth=2)
 ax_last.plot(ecdf_nfl_size_w.x, ecdf_nfl_size_w.y, label='Weekly', color=weekly_c, linestyle='--',linewidth=2)
 
@@ -282,6 +284,10 @@ for axis in ['top','bottom','left','right']:
     ax_last.spines[axis].set_linewidth(2)
 ax_last.set_xlabel('NF size')
 ax_last.set_ylabel('ECDF')
+#save figure
+    #change directory
+plt.savefig(r'D:\Paper\Code\HDL\Results\Hyperparamters_NF_D_W_v1.png',pad_inches=0.1)
+
 
 
     
