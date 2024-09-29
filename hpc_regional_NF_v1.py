@@ -491,7 +491,7 @@ name_time='./%s/RunTime_lag_%d_lead_%d_daymet_v1.csv'%(save_path_results,IL,LT)
 df_time.to_csv(name_time,index=False)
 
 #save weights
-dec_weights='./%s/Weight_lag_%d_lead_%d_RegionalNF_v1.h5'%(iid,IL,LT)
+dec_weights='./%s/Weight_lag_%d_lead_%d_RegionalNF_v1.h5'%(save_path_results,IL,LT)
 dec.save_weights(dec_weights)
 
 
