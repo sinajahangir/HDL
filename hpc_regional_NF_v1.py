@@ -509,7 +509,6 @@ for ii in list_:
   [xx_train,xx_val,xx_test],[yy_train,yy_val,yy_test]=read_data_s(basin_id=iid)
   
   #delete variables to save RAM
-  del xx_val
   del yy_val
   del yy_train
   del yy_test
@@ -517,14 +516,22 @@ for ii in list_:
   
   
   #use Adam as opimizer
-  optimizer = tf.keras.optimizers.Adam(learning_rate=5e-6)
+      ##lr can change
+  optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4)
   
   #load model weights for finetuning
-  model_=dec.load_weights(dec_weights)
+  model_=dec
   model_.compile(optimizer=optimizer, loss='mse')
-  #finetune the model for 15 epochs
+  #finetune the model
       ##epochs can change
-  model_.fit(x=[x_train,xx_train],y=[y_train],epochs=15,verbose=0)
+  #defining the callbacks for early stopping
+  callback_early = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+                                                      patience=25,
+                                                      restore_best_weights=True,
+                                                      mode='auto')
+  callback_learn=tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5,\
+    mode='auto', min_delta=1e-4, cooldown=0, min_lr=1e-6)
+  model_.fit(x=[x_train,xx_train],y=[y_train],validation_data=([x_val,xx_val],y_val),epochs=100,verbose=0)
   
   #produce the forecasts
   pr_l_out,pr_m_out,pr_u_out,y_out= model_for_(model_,x_test,xx_test,y_test,basin_id=iid,uq=95,lq=5)
