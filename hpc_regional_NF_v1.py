@@ -444,14 +444,14 @@ for ii in list_:
   if k==0:
       with tf.device("CPU"):
 
-          dataset = tf.data.Dataset.from_tensor_slices(([x_train,xx_train], y_train)).shuffle(buffer_size=1024).batch(32)
-          dataset_val = tf.data.Dataset.from_tensor_slices(([x_val,xx_val], y_val)).shuffle(buffer_size=1024).batch(32)
+          dataset = tf.data.Dataset.from_tensor_slices(((x_train,xx_train), y_train)).shuffle(buffer_size=1024).batch(32)
+          dataset_val = tf.data.Dataset.from_tensor_slices(((x_val,xx_val), y_val)).shuffle(buffer_size=1024).batch(32)
 
   else:
       with tf.device("CPU"):
 
-          dataset_temp = tf.data.Dataset.from_tensor_slices(([x_train,xx_train], y_train)).shuffle(buffer_size=1024).batch(32)
-          dataset_val_temp = tf.data.Dataset.from_tensor_slices(([x_val,xx_val], y_val)).shuffle(buffer_size=1024).batch(32)
+          dataset_temp = tf.data.Dataset.from_tensor_slices(((x_train,xx_train), y_train)).shuffle(buffer_size=1024).batch(32)
+          dataset_val_temp = tf.data.Dataset.from_tensor_slices(((x_val,xx_val), y_val)).shuffle(buffer_size=1024).batch(32)
           
           dataset=dataset.concatenate(dataset_temp)
           dataset_val=dataset_val.concatenate(dataset_val_temp)
