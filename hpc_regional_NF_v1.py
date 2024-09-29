@@ -5,7 +5,7 @@ First version: Oct 2024
 Email:mohammadsina.jahangir@gmail.com
 #This code is for developing a regional NF model for seven-day ahead forecasting
 
-#Tested on Python 3.10
+#Tested on Python 3.9
 Copyright (c) [2024] [Mohammad Sina Jahangir]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -236,6 +236,7 @@ def read_data_s(basin_id=0,LT=7,IL=365):
   #removing date (first column)
   x=np.asarray(df_data.iloc[:,1:])
   #removing zeros
+      #SWE
   x_=np.copy(np.delete(x,13,1))
   train_id,val_id=index_cal(x_)
   x_train_=x_[:train_id]
@@ -449,8 +450,8 @@ for ii in list_:
   else:
       with tf.device("CPU"):
 
-          dataset_temp = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(buffer_size=1024).batch(32)
-          dataset_val_temp = tf.data.Dataset.from_tensor_slices((x_val, y_val)).shuffle(buffer_size=1024).batch(32)
+          dataset_temp = tf.data.Dataset.from_tensor_slices(([x_train,xx_train], y_train)).shuffle(buffer_size=1024).batch(32)
+          dataset_val_temp = tf.data.Dataset.from_tensor_slices(([x_val,xx_val], y_val)).shuffle(buffer_size=1024).batch(32)
           
           dataset=dataset.concatenate(dataset_temp)
           dataset_val=dataset_val.concatenate(dataset_val_temp)
@@ -459,7 +460,7 @@ for ii in list_:
   k=k+1
   
 #initialize the model
-    #
+    #values selected based on post-processing
 dec=model_lstm_(n_features=np.shape(x_train)[-1],lstm_out_dec=200,\
                 dense_out_dec=42,num_components=2,component_value=21,\
         activation_dense_dec='linear',nout=LT,nin=365,\
