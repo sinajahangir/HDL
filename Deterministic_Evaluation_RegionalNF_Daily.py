@@ -73,14 +73,14 @@ for ii in range(0, len(metric_list)):
         #try and catch for nan values!
         else:
             try:
-                metric_basins_NF[ii].append(DEF.compute_metric_NF_W(basin=basin,metric=metric))
+                metric_basins_NF[ii].append(DEF.compute_metric_NF(basin=basin,metric=metric))
                 metric_basins_NF_reg[ii].append(DEF.compute_metric_NF_reg(basin=basin,metric=metric))
             except:
                 print('metric:%s-station:%s'%(metric_list[ii],basin))
 #%% plotting options
 params = {'legend.fontsize': 'large',
          'axes.labelsize': 'x-large',
-         'axes.titlesize':'large',
+         'axes.titlesize':'x-large',
          'xtick.labelsize':'x-large',
          'ytick.labelsize':'x-large'}
 pylab.rcParams.update(params)
@@ -90,21 +90,43 @@ rcParams['axes.labelweight'] = 'bold'
 rcParams['axes.titleweight'] = 'bold'
 #%%
 # Create subplots
-fig, axes = plt.subplots(1, 2, figsize=(8, 6))
-colors = ['#1f77b4', '#ff7f0e']
+fig, axes = plt.subplots(1, 2, figsize=(7, 5),sharex=True,sharey=True,dpi=400)
+# Define colors for the violins
+colors = ['#1f77b4', '#d62728'] # Dark Blue and Dark Red
 for ii in range(0, len(metric_list)):
-    data_temp=[np.asarray(metric_basins_NF[ii]).reshape((-1,1)),np.asarray(metric_basins_NF_reg[ii]).reshape((-1,1))]
+    metric_array_NF=np.asarray(metric_basins_NF[ii]).reshape((len(metric_basins_NF[ii]),7))
+    metric_array_NF_reg=np.asarray(metric_basins_NF_reg[ii]).reshape((len(metric_basins_NF_reg[ii]),7))
+    list_array=[np.median(metric_array_NF,axis=1),np.median(metric_array_NF_reg,axis=1)]
     # Plot violin plots for data1 and data2
-    parts = axes[ii].violinplot(data_temp, showmeans=False, showmedians=True)
-    # Set unique colors for each set
+    parts = axes[ii].violinplot(list_array, showmeans=False, showmedians=True)
+    # Assign different colors and increase linewidth for each violin
+    for idx, pc in enumerate(parts['bodies']):
+        pc.set_facecolor(colors[idx % len(colors)])  # Alternate between Dark Blue and Dark Red
+        pc.set_edgecolor('black')     # Set violin border color to black
+        pc.set_linewidth(2)           # Increase the border thickness to 3 for emphasis
+        pc.set_alpha(0.8)
 
-    for i in range(len(metric_basins_NF[ii])):
-        for partname in ('bodies', 'cmedians', 'cbars', 'cmins', 'cmaxes'):
-            if partname == 'bodies':
-                parts[partname][i].set_facecolor(colors[i])
-                parts[partname][i].set_facecolor(colors[i])
-            else:
-                parts[partname].set_color(colors[i])
-                parts[partname].set_color(colors[i])
+    # Customize the median line to be bold and black
+    for partname in ('cmedians','cbars', 'cmins', 'cmaxes'):
+        vp = parts[partname]
+        vp.set_edgecolor('black')
+        vp.set_linewidth(2)  # Make the median lines bold
+        
+    # Display the median value on top of the cmaxes (upper whiskers)
+    for idx, (median_value, cmax_value) in enumerate(zip(list_array, parts['cmaxes'].get_paths())):
+        max_value = np.max(cmax_value.vertices[:, 1])  # Get the maximum y-value of the cmaxes (upper whiskers)
+        median_value_median = np.median(median_value)  # Calculate the median value
+        axes[ii].text(idx + 1, max_value + 0.02, f'{median_value_median:.2f}', 
+                      horizontalalignment='center', fontsize=14, fontweight='bold')  # Add text above the cmaxes
+
+    # Only show two labels for both axes
+    axes[ii].set_xticks([1, 2])
+    axes[ii].set_xticklabels(['NF', 'NF-reg'])  # Example labels, adjust as needed
+    axes[0].set_ylabel('Seven-day median accuracy [-]')
+    axes[ii].set_xlabel('Model')
+    axes[ii].set_title(metric_list[ii])
+# Save the plot
+plt.tight_layout()
+plt.savefig(r'D:\Paper\Code\HDL\Results\Compare_NF_Regional_Daily_v1.png')
 #%%
 
