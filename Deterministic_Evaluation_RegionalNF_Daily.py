@@ -33,6 +33,7 @@ THE SOFTWARE.
 #Dependencies:
 -matplotlib
 -pandas
+-numpy
 """
 #%%import necessary libraries
 import matplotlib.pyplot as plt
@@ -127,6 +128,7 @@ for ii in range(0, len(metric_list)):
     axes[ii].set_title(metric_list[ii])
 # Save the plot
 plt.tight_layout()
+    #change directory
 plt.savefig(r'D:\Paper\Code\HDL\Results\Compare_NF_Regional_Daily_v1.png')
 #%%
 
