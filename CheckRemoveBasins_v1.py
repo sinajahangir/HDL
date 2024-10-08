@@ -110,7 +110,9 @@ def nse(observed, simulated):
     
     return nse_value
 #%%
+plt.style.use('classic')
 # Create subplots
+    ##Only 16 subplots are shown for illustrtative purposes
 fig, axes = plt.subplots(4, 4, figsize=(16, 16),sharex=True,dpi=500)
 # Define colors for the violins
 colors = ['#1f77b4', '#d62728'] # Dark Blue and Dark Red
@@ -120,11 +122,20 @@ for ii in range(0,len(obs)-3):
     axes[ii%4,ii//4].set_title('Basin:%s-NSE:%1.2f'%(basin_rm[ii],nse(obs[ii],pred[ii])))
     if ii//4==0:
         axes[ii%4,ii//4].set_ylabel('discharge (mm)')
-        axes[ii%4,ii//4].legend()
+        legend=axes[ii%4,ii//4].legend()
+        
     if ii%4==3:
         axes[ii%4,ii//4].set_xlabel('Sample')
         # setting ticks for x-axis 
         axes[ii%4,ii//4].set_xticks([0, 499, 999])
         axes[ii%4,ii//4].set_xticklabels([1, 500, 1000])
+    #change axis linewidth
+    for axis in ['top','bottom','left','right']:
+        axes[ii%4,ii//4].spines[axis].set_linewidth(2)
+    #tick paramters
+    axes[ii%4,ii//4].tick_params(direction='inout', length=6, width=2, colors='k')
+    axes[ii%4,ii//4].grid(axis='y', color='black', alpha=0.5)
+plt.tight_layout()
+plt.savefig(r'D:\Paper\Code\HDL\Results\CheckRemovedBasins_v1.png')
 #%%
 
