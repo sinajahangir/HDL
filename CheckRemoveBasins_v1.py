@@ -7,6 +7,7 @@ Email:mohammadsina.jahangir@gmail.com
     ##19 basins were removed as nan values were obtained for the forecasts/and or
     very large negative KGE/NSE values
     ##basins' IDs are presented below in the code; see basin_rm variable
+    ## training for these basins was very unstable
 
 
 #Tested on Python 3.9
