@@ -32,6 +32,7 @@ THE SOFTWARE.
 -matplotlib
 -pandas
 -numpy
+-statsmodels
 """
 #%%import necessary libraries
 import matplotlib.pyplot as plt
@@ -39,6 +40,7 @@ import matplotlib.pylab as pylab
 from os import chdir
 from os import listdir
 import numpy as np
+from statsmodels.distributions.empirical_distribution import ECDF
 #change directory
 #this is the folder where evaluation functions (DEF) are located
     ##change
@@ -95,7 +97,6 @@ for ii in range(0, len(metric_list)):
 # import library for CDF estimation
 metric_list_=['FLV','FLH']
 fig,ax=plt.subplots(nrows=1, ncols=2,figsize=(6, 4),dpi=600,sharey='all')
-from statsmodels.distributions.empirical_distribution import ECDF
 
 
 for ii in range(0,len(metric_list_)):
