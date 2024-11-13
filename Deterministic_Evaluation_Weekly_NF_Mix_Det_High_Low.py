@@ -113,7 +113,7 @@ for ii in range(0,len(metric_list_)):
     ecdf_a2 = ECDF(metric_list[1])
    
     # Plot the ECDFs
-    ax[ii].plot(ecdf_a1.x, ecdf_a1.y, label='HLS', color='blue', linestyle='-',linewidth=1.5)
+    ax[ii].plot(ecdf_a1.x, ecdf_a1.y, label=r'WLS$_{\rm S}$', color='blue', linestyle='-',linewidth=1.5)
     ax[ii].plot(ecdf_a2.x, ecdf_a2.y, label='BU', color='red', linestyle='--',linewidth=1.5)
     
     # Add the simple step function at zero
